@@ -4,11 +4,38 @@ author: "Liz Peterson"
 format: html
 editor_options: 
   chunk_output_type: console
+warning: FALSE
+message: FALSE
 ---
-
+# Interactive Session 7 (8/20/24)
+## Read in libraries
 ```{r}
 library(tidyverse)
 library(palmerpenguins)
 library(lubridate)
+```
+
+## Data wrangling refresher
+```{r}
+penguins <- palmerpenguins::penguins %>%
+  filter(island %in% c("Biscoe", "Dream")) %>%
+  select(-year, -sex) %>%
+  mutate(body_mass_kg = body_mass_g/1000) %>%
+  rename(location = island)
+```
+
+```{r}
+penguins2 <- palmerpenguins::penguins %>%
+  filter(species == "Adelie") %>% # only adelie penguins
+  filter(!is.na(flipper_length_mm)) %>% # get rid of NA's in flipper length
+  group_by(sex) %>%
+  summarize(mean_length_mm = mean(flipper_length_mm),
+            sd_length_mm = sd(flipper_length_mm),
+            sample_size = n()) # counts up rows in what we grouped by (sex)
+```
+
+## Wrangling continued - joins
+```{r}
+
 ```
 
