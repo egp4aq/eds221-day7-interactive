@@ -36,6 +36,70 @@ penguins2 <- palmerpenguins::penguins %>%
 
 ## Wrangling continued - joins
 ```{r}
+# data set pasted in from course website using addin paste as tribble
+# from datapasta
+animals <- tibble::tribble(
+  ~location,   ~species,  ~maturity,
+   "lagoon",   "bobcat",    "adult",
+    "bluff",   "coyote", "juvenile",
+    "creek",      "fox",    "adult",
+     "oaks", "squirrel", "juvenile",
+    "bluff",   "bobcat",    "adult"
+  )
+```
 
+```{r}
+sites <- tibble::tribble(
+  ~location,      ~full_site_name, ~jurisdiction,
+    "beach",       "Goleta Beach",     "SB City",
+   "lagoon",        "UCSB Lagoon",        "UCSB",
+    "bluff",       "Ellwood Mesa",     "SB City",
+     "oaks", "Fremont Campground",        "USFS"
+  )
+```
+
+## filtering joins
+```{r}
+# everything from both data frames is retained, regardless of whether or not it has a match in the data frame it's being joined to
+full_join_example <- full_join(animals, sites)
+```
+
+```{r}
+# everything in animals is kept. only things in sites that have a matching key in animals are joined to it. things in sites that do not have a matching key in animals are dropped
+left_join_example <- left_join(animals, sites)
+```
+
+```{r}
+right_join_example <- right_join(animals, sites)
+```
+
+```{r}
+# only keep stuff if they have a key match in animals and sites
+inner_join_example <- inner_join(animals, sites)
+```
+
+## mutating joins
+```{r}
+# only keeps observations in animals if they have a match in sites (does not join columns)
+semi_join_example <- semi_join(animals, sites)
+# same as doing filter
+semi_join_test <- animals %>%
+  filter(location %in% sites$location)
+```
+
+```{r}
+# only keeps observations in animals if they do not have a match in sites
+anti_join_example <- anti_join(animals, sites)
+# same as doing filter
+anti_join_test <- animals %>%
+  filter(!location %in% sites$location)
+```
+
+```{r}
+sites <- sites %>%
+  rename(place = location)
+test_join <- full_join(animals, sites) # this doesn't work because the common variable is gone
+
+test_join <- full_join(animals, sites, by = c("location" = "place"))
 ```
 
